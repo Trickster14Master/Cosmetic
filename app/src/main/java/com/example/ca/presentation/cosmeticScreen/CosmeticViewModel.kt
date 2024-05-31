@@ -64,4 +64,6 @@ class CosmeticViewModel @Inject constructor(
             }
         }
     }
+
+
 }

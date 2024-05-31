@@ -6,4 +6,5 @@ object Route {
     const val COSMETICS = "cosmetics_route"
     const val CARD = "card_route"
     const val USER = "user_route"
+    const val OrderNotification = "order_notification"
 }

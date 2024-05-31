@@ -78,7 +78,9 @@ fun OrderScreen(navController: NavController){
                             ),
                             onClick = {
                                 orderViewModel.postOrder(OrderPost(prefUserToken?.getString("UserToken","пусто").toString(), prise, listID))
-                                navController.navigate(Route.CARD)
+                                navController.navigate(Route.OrderNotification)
+                                listID.clear()
+                                listCosmetic.clear()
                             }
                         ) {
                             Text(

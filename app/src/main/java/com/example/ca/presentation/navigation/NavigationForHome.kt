@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.ca.presentation.cosmeticScreen.CosmeticScreen
+import com.example.ca.presentation.orderScreen.OrderNotificationScreen
 import com.example.ca.presentation.orderScreen.OrderScreen
 import com.example.ca.presentation.userScreen.UserScreen
 
@@ -22,6 +23,9 @@ fun NavigationForHome (navController: NavHostController) {
         }
         composable(route=Route.USER){
             UserScreen(navController=navController)
+        }
+        composable(route=Route.OrderNotification){
+            OrderNotificationScreen(navController=navController)
         }
     }
 }

@@ -11,9 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -27,6 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,6 +58,15 @@ fun AuthenticationScreen(navController: NavController) {
     var password by remember {
         mutableStateOf("")
     }
+
+    var statePassword by remember {
+        mutableStateOf(false)
+    }
+
+    val icon = if(statePassword)
+        painterResource(id = R.drawable.design_ic_visibility)
+    else
+        painterResource(id = R.drawable.baseline_visibility_off_24)
 
 
     Box(modifier = Modifier.fillMaxSize().background(Color.White)){
@@ -96,11 +111,12 @@ fun AuthenticationScreen(navController: NavController) {
                     cursorColor = MainColor,
 
                     ),
-                label = { Text(text = "Логен", color = MainColor, fontSize=10.sp, modifier = Modifier.background(
+                label = { Text(text = "Логин", color = MainColor, fontSize=10.sp, modifier = Modifier.background(
                     Color.Transparent))
                 },
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+
             )
 
             TextField(
@@ -121,7 +137,16 @@ fun AuthenticationScreen(navController: NavController) {
                     Color.Transparent))
                 },
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        statePassword = !statePassword
+                    }) {
+                        Icon(painter=icon, contentDescription = "", tint = Color.Gray)
+                    }
+                },
+                visualTransformation = if(statePassword) VisualTransformation.None
+                else PasswordVisualTransformation()
             )
 
             Button(

@@ -46,7 +46,7 @@ fun UserScreen(navController: NavController){
     Column(modifier= Modifier.padding(vertical = 50.dp, horizontal = 20.dp).fillMaxSize()) {
         Box(){
             Row() {
-                Icon(painter = painterResource(id =  R.drawable.user_user), contentDescription = "", tint = MainColor, modifier = Modifier.size(50.dp))
+//                Icon(painter = painterResource(id =  R.drawable.user_user), contentDescription = "", tint = MainColor, modifier = Modifier.size(50.dp))
                 Text(text = " ВЫХОД",  modifier = Modifier.align(Alignment.Bottom))
             }
         }
@@ -90,7 +90,7 @@ fun UserScreen(navController: NavController){
                     cursorColor = MainColor,
 
                     ),
-                label = { Text(text = "Фамилия", color = MainColor, fontSize=10.sp, modifier = Modifier.background(
+                label = { Text(text = "Номер телефона", color = MainColor, fontSize=10.sp, modifier = Modifier.background(
                     Color.Transparent))},
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)

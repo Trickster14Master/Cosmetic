@@ -83,7 +83,7 @@ fun CosmeticScreen(navController: NavController){
     when(stateCosmetic){
         // выводим ProductSuccessScreen если state равен Resource.Success
         is Resource.Success->{
-            CosmeticScreenSuccess(stateCosmetic.data ?: listOf(), stateBrands.data?: listOf(), cosmeticViewModel)
+            CosmeticScreenSuccess(stateCosmetic.data ?: listOf(), stateBrands.data?: listOf(), cosmeticViewModel, navController)
         }
 
         is Resource.Error->{
@@ -98,7 +98,7 @@ fun CosmeticScreen(navController: NavController){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CosmeticScreenSuccess(cosmetic:List<CosmeticResult>, brands:List<BrandsResult>, viewModel:CosmeticViewModel){
+fun CosmeticScreenSuccess(cosmetic:List<CosmeticResult>, brands:List<BrandsResult>, viewModel:CosmeticViewModel, navController: NavController){
 
     var searhe by remember {
         mutableStateOf("")
@@ -107,11 +107,12 @@ fun CosmeticScreenSuccess(cosmetic:List<CosmeticResult>, brands:List<BrandsResul
         mutableStateOf(false)
     }
     Column(
+        modifier = Modifier.padding(bottom = 55.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(modifier = Modifier
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 30.dp)
             .fillMaxWidth()){
             TextField(
                 modifier= Modifier.padding(vertical = 3.dp),
@@ -128,7 +129,7 @@ fun CosmeticScreenSuccess(cosmetic:List<CosmeticResult>, brands:List<BrandsResul
                     cursorColor = MainColor,
 
                     ),
-                leadingIcon= {
+                trailingIcon= {
                     IconButton(onClick = { viewModel.searchCosmetic(searhe)}) {
                         Icon(Icons.Filled.Search, contentDescription = "")
                     }
@@ -180,7 +181,7 @@ fun CosmeticScreenSuccess(cosmetic:List<CosmeticResult>, brands:List<BrandsResul
 
         Row (modifier = Modifier
             .align(Alignment.Start)
-            .padding(start = 20.dp, top = 20.dp, bottom = 10.dp)){
+            .padding(start = 20.dp, top = 20.dp, )){
            Text(text = "HOT", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = MainColor)
            Text(text = " Новинки", fontWeight = FontWeight.Bold, fontSize = 20.sp)
 
@@ -191,23 +192,23 @@ fun CosmeticScreenSuccess(cosmetic:List<CosmeticResult>, brands:List<BrandsResul
         Box(
             modifier = Modifier
                 .background(Color.White)
-                .padding(bottom = 60.dp,)
+                .padding(top=10.dp,)
+                .fillMaxSize(),
         ) {
-
-        }
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(2),
-                    modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxWidth(),
-                    ){
-                        items(cosmetic){items->
-                            CosmeticItem(item = items)
-                        }
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxSize(),
+            ){
+                items(cosmetic){items->
+                    CosmeticItem(item = items, navController)
+                }
             }
         }
-
     }
+
+}
 
 
 

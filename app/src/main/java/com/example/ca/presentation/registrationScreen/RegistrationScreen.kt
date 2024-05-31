@@ -1,5 +1,6 @@
 package com.example.ca.presentation.registrationScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,8 +34,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,7 +67,7 @@ fun RegistrationScreen(navController: NavController){
     }
 
     var surname by remember {
-        mutableStateOf("")
+        mutableStateOf("+7")
     }
 
     var e_mail by remember {
@@ -75,9 +82,25 @@ fun RegistrationScreen(navController: NavController){
         mutableStateOf("")
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(Color.White)){
+    var statePassword by remember {
+        mutableStateOf(false)
+    }
+    val context = LocalContext.current
+
+    val icon = if(statePassword)
+        painterResource(id = R.drawable.design_ic_visibility)
+    else
+        painterResource(id = R.drawable.baseline_visibility_off_24)
+
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)){
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 40.dp).background(Color.White),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 40.dp)
+                .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -119,7 +142,7 @@ fun RegistrationScreen(navController: NavController){
                     cursorColor = MainColor,
 
                     ),
-                label = { Text(text = "Имя", color = MainColor, fontSize=10.sp, modifier = Modifier.background(Color.Transparent))},
+                label = { Text(text = "Логин", color = MainColor, fontSize=10.sp, modifier = Modifier.background(Color.Transparent))},
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -138,9 +161,10 @@ fun RegistrationScreen(navController: NavController){
                     cursorColor = MainColor,
 
                     ),
-                label = { Text(text = "Фамилия", color = MainColor, fontSize=10.sp, modifier = Modifier.background(Color.Transparent))},
+                label = { Text(text = "Номер телефона", color = MainColor, fontSize=10.sp, modifier = Modifier.background(Color.Transparent))},
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
 
             TextField(
@@ -178,7 +202,17 @@ fun RegistrationScreen(navController: NavController){
                     ),
                 label = { Text(text = "Пароль", color = MainColor, fontSize=10.sp, modifier = Modifier.background(Color.Transparent))},
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        statePassword = !statePassword
+                    }) {
+                        Icon(painter=icon, contentDescription = "", tint = Color.Gray)
+                    }
+                },
+                visualTransformation = if(statePassword) VisualTransformation.None
+                else PasswordVisualTransformation()
             )
 
             TextField(
@@ -197,21 +231,36 @@ fun RegistrationScreen(navController: NavController){
                     ),
                 label = { Text(text = "Подтвердите пароль", color = MainColor, fontSize=10.sp, modifier = Modifier.background(Color.Transparent))},
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        statePassword = !statePassword
+                    }) {
+                        Icon(painter=icon, contentDescription = "", tint = Color.Gray)
+                    }
+                },
+                visualTransformation = if(statePassword) VisualTransformation.None
+                else PasswordVisualTransformation()
             )
 
             Button(
                 colors = ButtonDefaults.buttonColors(GrayMain),
                 shape = RoundedCornerShape(10.dp),
                 onClick = {
-                    registrationViewModel.registration(RegistrationUser(e_mail, name,password))
-                    saveUserSurname(surname)
-                    saveUserSurname(name)
-                    saveUserPassword(password)
-                    saveUserEmail(e_mail)
-                    navController.navigate(Graph.AUTHENTICATION)
+                    if(password==password2){
+                        registrationViewModel.registration(RegistrationUser(e_mail, name,password))
+                        saveUserSurname(surname)
+                        saveUserName(name)
+                        saveUserPassword(password)
+                        saveUserEmail(e_mail)
+                        navController.navigate(Graph.AUTHENTICATION)
+                    }else{
+                        Toast.makeText(context, "Пароль не совпал", Toast.LENGTH_SHORT).show()
+                    }
                 },
-                modifier = Modifier.fillMaxWidth().padding(top=30.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp)
             ) {
                 Text(text = "РЕГИСТРАЦИЯ", color = Color.White)
             }
